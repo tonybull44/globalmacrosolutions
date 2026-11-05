@@ -162,9 +162,9 @@ PAGES = {
               relink(S['equipo']), faq([0, 1, 7]), cierre]),
 }
 
-ICONS = '''<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
-<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+ICONS = '''<link rel="icon" href="favicon.ico?v=3" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png?v=3">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png?v=3">
 <link rel="manifest" href="site.webmanifest">'''
 SPEC = '''<script type="speculationrules">{"prefetch":[{"source":"document","where":{"href_matches":"/*.html"},"eagerness":"moderate"}]}</script>'''
 
@@ -192,6 +192,11 @@ def build(name, p):
 # ---------- recursos compartidos ----------
 (ROOT / 'assets').mkdir(exist_ok=True)
 (ROOT / 'assets' / 'site.css').write_text(css_main.strip() + '\n\n' + (B / 'motion.css').read_text())
+import json as _json
+_X = _json.loads((B / 'i18n_extra.json').read_text())
+_inj = 'Object.keys(%s).forEach(function(l){if(D[l])Object.assign(D[l],%s[l])});\n' % ('__X', '__X')
+i18n_js = i18n_js.replace('var REV={};', 'var __X=' + _json.dumps(_X, ensure_ascii=False) + ';' + _inj + 'var REV={};', 1)
+assert '__X' in i18n_js
 (ROOT / 'assets' / 'i18n.js').write_text(i18n_js.strip() + '\n')
 
 js = main_js
