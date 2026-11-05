@@ -1,0 +1,85 @@
+/* ===== Movimiento y navegación multipágina (GMS) ===== */
+
+/* Lenis · scroll suave */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-stopped{overflow:hidden}
+
+/* Transiciones entre páginas (navegadores compatibles) */
+@view-transition{navigation:auto}
+.nav{view-transition-name:site-nav}
+::view-transition-group(site-nav){animation:none}
+::view-transition-old(root){animation:vt-out .26s cubic-bezier(.4,0,1,1) both}
+::view-transition-new(root){animation:vt-in .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes vt-out{to{opacity:0;transform:translateY(-10px)}}
+@keyframes vt-in{from{opacity:0;transform:translateY(18px)}}
+
+/* Aparición por secciones */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1);transition-delay:var(--rvd,0s)}
+.rv.in{opacity:1;transform:none}
+
+/* Hero de páginas internas */
+.page-hero{padding-top:180px;padding-bottom:84px}
+.page-hero h1{font-size:clamp(38px,6vw,72px);max-width:17ch}
+.page-hero .eb{color:rgba(255,255,255,.62)}
+.page-hero .eb::before{background:var(--mint)}
+.page-hero .ctas{margin-top:34px}
+@media (max-width:760px){.page-hero{padding-top:140px;padding-bottom:60px}}
+
+/* Enlace activo del menú */
+.dm-link[aria-current="page"],.dm-mlink[aria-current="page"]{color:var(--black);font-weight:600}
+
+/* Inicio · dos caminos */
+.paths-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;margin-top:44px}
+.path-card{position:relative;display:flex;flex-direction:column;gap:12px;padding:30px;border-radius:22px;background:#121212;border:1px solid #262424;color:#fff;text-decoration:none;overflow:hidden;transition:transform .45s cubic-bezier(.16,1,.3,1),border-color .3s}
+.path-card:hover{transform:translateY(-4px);border-color:#3a3737}
+.path-card .path-k{font-family:var(--fm);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mint)}
+.path-card h3{font-size:clamp(26px,3vw,36px);letter-spacing:-.02em}
+.path-card p{margin:0;color:#a09e9e;font-size:16px;line-height:1.6;max-width:44ch}
+.path-card .path-shot{margin-top:10px;border-radius:14px;overflow:hidden;border:1px solid #2a2828;transform:translateY(8px);transition:transform .6s cubic-bezier(.16,1,.3,1)}
+.path-card:hover .path-shot{transform:translateY(0) scale(1.015)}
+.path-card .path-shot img{display:block;width:100%;height:auto}
+.path-card .path-go{margin-top:auto;padding-top:14px;font-family:var(--fd);font-weight:600;font-size:15px;display:inline-flex;gap:8px;align-items:center}
+.path-card .path-go i{font-style:normal;transition:transform .3s cubic-bezier(.16,1,.3,1)}
+.path-card:hover .path-go i{transform:translateX(4px)}
+.path-card.alt{background:linear-gradient(160deg,#182c5f 0%,#101a3a 55%,#0b1024 100%);border-color:#24356e}
+.path-card.alt .path-k{color:#8ea0f5}
+.path-card.alt p{color:#b9c2e6}
+.path-facts{display:grid;gap:10px;margin-top:12px}
+.path-facts div{padding:16px 18px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.path-facts b{display:block;font-family:var(--fnum);font-size:26px;letter-spacing:-.01em}
+.path-facts span{font-size:13px;color:#b9c2e6}
+@media (max-width:860px){.paths-grid{grid-template-columns:1fr}}
+
+/* Panel demo de la Terminal: vida propia */
+.view.on .bar i{animation:gm-bar 1s cubic-bezier(.16,1,.3,1) backwards}
+.view.on .srow:nth-child(2) .bar i{animation-delay:.06s}.view.on .srow:nth-child(3) .bar i{animation-delay:.12s}
+.view.on .srow:nth-child(4) .bar i{animation-delay:.18s}.view.on .srow:nth-child(5) .bar i{animation-delay:.24s}.view.on .srow:nth-child(6) .bar i{animation-delay:.3s}
+.bar i{transition:width .9s cubic-bezier(.16,1,.3,1)}
+@keyframes gm-bar{from{width:0}}
+.view.on .tr i{transform-origin:50% 100%;animation:gm-col .8s cubic-bezier(.16,1,.3,1) both}
+.view.on .tr i:nth-child(2){animation-delay:.07s}.view.on .tr i:nth-child(3){animation-delay:.14s}.view.on .tr i:nth-child(4){animation-delay:.21s}.view.on .tr i:nth-child(5){animation-delay:.28s}.view.on .tr i:nth-child(6){animation-delay:.35s}
+@keyframes gm-col{from{transform:scaleY(0)}}
+.view.on .pb i{transform-origin:0 50%;animation:gm-x 1.2s .3s cubic-bezier(.16,1,.3,1) both}
+@keyframes gm-x{from{transform:scaleX(0)}}
+.view.on .idea,.view.on .lv>div{animation:gm-up .6s cubic-bezier(.16,1,.3,1) both}
+.view.on .lv>div:nth-child(2){animation-delay:.08s}.view.on .lv>div:nth-child(3){animation-delay:.16s}
+@keyframes gm-up{from{opacity:0;transform:translateY(10px)}}
+.view.on{animation:gm-fade .45s ease both}
+@keyframes gm-fade{from{opacity:0}}
+.ticker .tk-track{display:inline-flex;gap:22px;animation:gm-tk 26s linear infinite}
+@keyframes gm-tk{to{transform:translateX(-50%)}}
+.ticker i{transition:color .4s}
+.ticker i.fl{color:#fff}
+.stab{position:relative;overflow:hidden}
+.stab .stab-prog{position:absolute;left:20px;right:20px;bottom:10px;height:2px;border-radius:2px;background:rgba(255,255,255,.08);overflow:hidden;display:none}
+.stab[aria-selected="true"] .stab-prog{display:block}
+.stab .stab-prog i{display:block;height:100%;width:100%;background:var(--mint);transform-origin:0 50%;transform:scaleX(0)}
+.op.auto .stab[aria-selected="true"] .stab-prog i{animation:gm-x var(--auto,5s) linear both}
+
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none}
+  ::view-transition-old(root),::view-transition-new(root){animation:none}
+  .view.on .bar i,.view.on .tr i,.view.on .pb i,.view.on .idea,.view.on .lv>div,.view.on,.ticker .tk-track{animation:none}
+}
