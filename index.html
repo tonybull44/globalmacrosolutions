@@ -918,10 +918,7 @@ html.gms-intro .nav{opacity:0}
 <script>
 (function(){
   var root=document.documentElement,box=document.getElementById('gmsIntro');if(!box)return;
-  var force=/[?&]intro=1/.test(location.search),seen=false;
-  try{seen=sessionStorage.getItem('gms-intro')==='1'}catch(e){}
-  if((seen&&!force)||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){box.remove();return}
-  try{sessionStorage.setItem('gms-intro','1')}catch(e){}
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches){box.remove();return}
   root.classList.add('gms-intro');
   if(innerWidth<innerHeight){box.querySelector('svg').setAttribute('viewBox','250 180 1100 540');var tg=box.querySelector('.gi-tag');tg.setAttribute('y','680');tg.style.fontSize='34px';tg.style.letterSpacing='12px'}
   var done=false;
