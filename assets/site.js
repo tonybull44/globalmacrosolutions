@@ -459,3 +459,19 @@ if(det)plan(1);
     },2200);
   }
 })();
+
+/* --- Video en ventana (botón masterclass gratuita) --- */
+(function(){
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('[data-video]');if(!a||e.metaKey||e.ctrlKey)return;e.preventDefault();
+    var id=a.getAttribute('data-video'),back=document.activeElement;
+    var m=document.createElement('div');m.className='vmodal';m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');m.setAttribute('aria-label','Masterclass gratuita');
+    m.innerHTML='<button class="vmodal-x" type="button" aria-label="Cerrar video">×</button><div class="vmodal-box"><iframe src="https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1&playsinline=1" title="Masterclass gratuita" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>';
+    document.body.appendChild(m);if(window.__lenis)window.__lenis.stop();
+    requestAnimationFrame(function(){m.classList.add('on')});
+    var x=m.querySelector('.vmodal-x');x.focus();
+    function close(){m.classList.remove('on');document.removeEventListener('keydown',esc);if(window.__lenis)window.__lenis.start();setTimeout(function(){m.remove();back&&back.focus&&back.focus()},300)}
+    function esc(ev){if(ev.key==='Escape')close()}
+    x.addEventListener('click',close);m.addEventListener('click',function(ev){if(ev.target===m)close()});document.addEventListener('keydown',esc);
+  });
+})();

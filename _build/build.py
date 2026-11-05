@@ -162,6 +162,10 @@ PAGES = {
               relink(S['equipo']), faq([0, 1, 7]), cierre]),
 }
 
+ICONS = '''<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">'''
 SPEC = '''<script type="speculationrules">{"prefetch":[{"source":"document","where":{"href_matches":"/*.html"},"eagerness":"moderate"}]}</script>'''
 
 def build(name, p):
@@ -172,7 +176,7 @@ def build(name, p):
     if p['nav']:
         nav = nav.replace(f'class="dm-trig dm-link" href="{p["nav"]}"', f'class="dm-trig dm-link" href="{p["nav"]}" aria-current="page"')
         nav = nav.replace(f'class="dm-mlink" href="{p["nav"]}"', f'class="dm-mlink" href="{p["nav"]}" aria-current="page"')
-    out = [h.rstrip(), '<link rel="stylesheet" href="assets/site.css">', SPEC, '</head>', '<body>']
+    out = [h.rstrip(), ICONS, '<link rel="stylesheet" href="assets/site.css">', SPEC, '</head>', '<body>']
     if p.get('intro'): out.append(intro)
     out += [nav, tpl, '<main id="top">', '\n\n'.join(p['body']), '</main>', ftr,
             '<script src="assets/i18n.js"></script>',

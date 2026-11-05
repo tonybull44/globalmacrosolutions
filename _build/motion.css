@@ -83,3 +83,12 @@ html.lenis,html.lenis body{height:auto}
   ::view-transition-old(root),::view-transition-new(root){animation:none}
   .view.on .bar i,.view.on .tr i,.view.on .pb i,.view.on .idea,.view.on .lv>div,.view.on,.ticker .tk-track{animation:none}
 }
+
+/* Ventana de video (masterclass) */
+.vmodal{position:fixed;inset:0;z-index:9000;display:grid;place-items:center;padding:20px;background:rgba(5,5,5,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;transition:opacity .3s ease}
+.vmodal.on{opacity:1}
+.vmodal-box{position:relative;width:min(1100px,100%);aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#000;box-shadow:0 40px 120px -30px rgba(43,68,211,.5);transform:translateY(16px) scale(.97);transition:transform .45s cubic-bezier(.16,1,.3,1)}
+.vmodal.on .vmodal-box{transform:none}
+.vmodal iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vmodal-x{all:unset;position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:16px;width:44px;height:44px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;cursor:pointer;font-size:22px;line-height:1}
+.vmodal-x:hover,.vmodal-x:focus-visible{background:rgba(255,255,255,.2)}
