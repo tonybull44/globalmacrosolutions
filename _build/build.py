@@ -209,6 +209,12 @@ js = js.replace("const cards=[...document.querySelectorAll('.fsc-card')];if(!car
                 "  await new Promise(r=>{const o=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){o.disconnect();r()}},{rootMargin:'300px'});cards.forEach(c=>o.observe(c))});", 1)
 (ROOT / 'assets' / 'site.js').write_text(js.strip() + '\n\n' + (B / 'motion.js').read_text())
 
+import hashlib as _h
+def _v(f): return _h.sha1((ROOT / f).read_bytes()).hexdigest()[:8]
+VER = {f: _v(f) for f in ['assets/site.css', 'assets/i18n.js', 'assets/site.js']}
 for n, p in PAGES.items():
     print(n, build(n, p))
+    x = (ROOT / n).read_text()
+    for f, v in VER.items(): x = x.replace(f'"{f}"', f'"{f}?v={v}"')
+    (ROOT / n).write_text(x)
 print('site.css', (ROOT / 'assets/site.css').stat().st_size, 'site.js', (ROOT / 'assets/site.js').stat().st_size)
