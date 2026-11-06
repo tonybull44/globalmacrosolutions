@@ -1497,7 +1497,7 @@ html.gms-intro .nav .logo img,html.gms-logo-wait .nav .logo img{opacity:0}
       <a class="sgf-field sgf-cta" href="https://comunidad.globalmacroterminal.com"><span>Únete al Club de Traders</span><span class="sgf-go"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h9.2M6.4 2.2 10.2 6l-3.8 3.8" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="square"/></svg></span></a>
     </div>
     <nav aria-label="Ecosistema"><ul class="sgf-list">
-      <li class="sgf-fade"><a class="sgf-link" data-scr href="https://www.globalmacroterminal.com/">Global Macro Terminal</a></li>
+      <li class="sgf-fade"><a class="sgf-link" data-scr href="terminal.html">Global Macro Terminal</a></li>
       <li class="sgf-fade"><a class="sgf-link" data-scr href="https://acelerador.globalmacroterminal.com">Trading Hub</a></li>
       <li class="sgf-fade"><a class="sgf-link" data-scr href="https://calendly.com/camilo-pacheco-globalmacrosolutions/30min">Agendar sesión</a></li>
       <li class="sgf-fade"><a class="sgf-link" data-scr href="login.html">Portal de clientes</a></li>
@@ -1897,11 +1897,14 @@ plan(1);
   const rect=(x,y,w,h)=>'M'+f(x)+' '+f(y)+'H'+f(x+w)+'V'+f(y+h)+'H'+f(x)+'Z';
   const slant=(x1,y1,x2,y2,t)=>'M'+f(x1)+' '+f(y1)+'H'+f(x1+t)+'L'+f(x2+t)+' '+f(y2)+'H'+f(x2)+'Z';
   const ring=(cx,cy,rx,ry,tx,ty)=>{const e=(r1,r2)=>'M'+f(cx-r1)+' '+f(cy)+'A'+f(r1)+' '+f(r2)+' 0 1 1 '+f(cx+r1)+' '+f(cy)+'A'+f(r1)+' '+f(r2)+' 0 1 1 '+f(cx-r1)+' '+f(cy)+'Z';return e(rx,ry)+e(rx-tx,ry-ty)};
+  // C: anillo abierto a la derecha (apertura de ±a grados), con cortes horizontales en las puntas
+  const cee=(cx,cy,rx,ry,tx,ty,a)=>{const r=a*Math.PI/180,ox=cx+rx*Math.cos(r),oy=ry*Math.sin(r),ix=cx+(rx-tx)*Math.cos(r),iy=(ry-ty)*Math.sin(r);return 'M'+f(ox)+' '+f(cy-oy)+'A'+f(rx)+' '+f(ry)+' 0 1 0 '+f(ox)+' '+f(cy+oy)+'L'+f(ix)+' '+f(cy+iy)+'A'+f(rx-tx)+' '+f(ry-ty)+' 0 1 1 '+f(ix)+' '+f(cy-iy)+'Z'};
   const bowl=(x,y,w,h,t,tb)=>{const ry=h/2,rx=Math.min(w-t,ry*.95),sx=x+w-rx;return 'M'+f(x)+' '+f(y)+'H'+f(sx)+'A'+f(rx)+' '+f(ry)+' 0 0 1 '+f(sx)+' '+f(y+h)+'H'+f(x)+'Z'+'M'+f(x+t)+' '+f(y+tb)+'H'+f(sx)+'A'+f(rx-t)+' '+f(ry-tb)+' 0 0 1 '+f(sx)+' '+f(y+h-tb)+'H'+f(x+t)+'Z'};
   const G={M:{w:112,d:[rect(0,0,S+3,100),slant(0,0,46,100,9),slant(68,0,40,100,22),rect(112-S-3,0,S+3,100)]},
     A:{w:96,d:[slant(37,0,0,100,23),slant(37,0,73,100,23),rect(18,60,60,16)]},
     R:{w:84,d:[rect(0,0,S,100),bowl(0,0,82,58,S,B),slant(34,50,62,100,22)]},
-    O:{w:100,d:[ring(50,50,50,50,S+2,B)]}};
+    O:{w:100,d:[ring(50,50,50,50,S+2,B)]},
+    C:{w:94,d:[cee(50,50,50,50,S+2,B,41)]}};
   const turn=(x,y,t)=>{const n=((t%4)+4)%4;let a=x,b=y;for(let i=0;i<n;i++){const q=a;a=SH-b;b=q}return [a,b]};
   const restPivot=t=>turn(REST,REST,t);
   const blades=(px,py,t)=>{const [qx,qy]=turn(clamp(px,8,92),clamp(py,8,92),-t);
@@ -1910,7 +1913,7 @@ plan(1);
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const el=(n,a)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e};
   // layout
-  const word='MACRO', shutterAt=2, gap=12;let x=0;const items=[];
+  const word='MACRO', shutterAt=-1, gap=12;let x=0;const items=[];
   [...word].forEach((ch,i)=>{const sh=i===shutterAt;const w=sh?SH:G[ch].w;items.push({ch,x,w,sh});x+=w+gap});
   const width=x-gap;
   svg.setAttribute('viewBox','0 0 '+f(width)+' '+CAP);svg.style.aspectRatio=width+' / '+CAP;
@@ -1942,7 +1945,7 @@ plan(1);
     a.addEventListener('pointerenter',run);a.addEventListener('focus',run)});
   // revelado + obturador que sigue al puntero
   const ptr={x:0,y:0,inside:false};let pivot=restPivot(0),visible=false,raf=0,last=0;
-  const paint=(px,py)=>blades(px,py,turns).forEach((p,i)=>polys[i].setAttribute('points',p.map(f).join(' ')));
+  const paint=(px,py)=>{if(!polys.length)return;blades(px,py,turns).forEach((p,i)=>polys[i].setAttribute('points',p.map(f).join(' ')))};
   const onPtr=e=>{ptr.inside=e.type!=='pointerleave';const r=svg.getBoundingClientRect(),sc=r.width/width||1;ptr.x=(e.clientX-r.left)/sc-shX;ptr.y=(e.clientY-r.top)/sc};
   ['pointermove','pointerenter','pointerleave'].forEach(t=>root.addEventListener(t,onPtr));
   const tick=now=>{const dt=Math.min(.1,(now-last)/1000);last=now;const rest=restPivot(turns);
